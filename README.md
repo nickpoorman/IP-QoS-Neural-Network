@@ -1,5 +1,5 @@
 IP QoS Neural Network
-====================
+---------------------
 
 This is a project for my Neural Nets class. Fall 11'
 
@@ -11,7 +11,7 @@ Internet QoS fails to achieve fairness between specific hosts.
 
 
 Mission
-=======
+-------
 
 To produce a working QoS that will dequeue packets based on weights produced by a neural network.
 
