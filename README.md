@@ -1,11 +1,19 @@
-h1. IP QoS Neural Network
+IP QoS Neural Network
+====================
+
 This is a project for my Neural Nets class. Fall 11'
 
-h2. Problem
+
+Problem
+=======
+
 Internet QoS fails to achieve fairness between specific hosts.
 
-h2. Mission
+
+Mission
+=======
+
 To produce a working QoS that will dequeue packets based on weights produced by a neural network.
 
 
-Project by "Nicholas Poorman":http://poorman.me
+Project by [Nicholas Poorman](http://poorman.me)
