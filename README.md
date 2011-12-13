@@ -5,7 +5,7 @@ This is a project for my Neural Nets class. Fall 11'
 
 
 Problem
-=======
+-------
 
 Internet QoS fails to achieve fairness between specific hosts.
 
