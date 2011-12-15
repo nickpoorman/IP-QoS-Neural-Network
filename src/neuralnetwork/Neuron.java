@@ -81,6 +81,7 @@ public class Neuron extends Model<Double, Double> {
 	}
 
 	public void setError(double error) {
+		System.out.println("Error was: " + this.error + " error is now: " + error);
 		this.error = error;
 	}
 }

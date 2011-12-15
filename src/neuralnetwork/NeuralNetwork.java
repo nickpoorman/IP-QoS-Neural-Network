@@ -204,7 +204,6 @@ public class NeuralNetwork extends Model<Double, Double> {
 					Weight w = prevLayerWeights.get(weightNum);
 					w.updateWeight(neuronError);
 				}
-
 			}
 		}
 	}

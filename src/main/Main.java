@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		int[] numNeuronsAtEachLayer = new int[3];
 		numNeuronsAtEachLayer[0] = 2;
-		numNeuronsAtEachLayer[1] = 3;
+		numNeuronsAtEachLayer[1] = 2;
 		numNeuronsAtEachLayer[2] = 1;
 
 		Scanner sc = new Scanner(System.in);
@@ -34,7 +34,10 @@ public class Main {
 		sf.takeInputFunction(new BinaryInput());
 		// int runTimes = numNeuronsAtEachLayer.length +
 		// (numNeuronsAtEachLayer.length - 1);
-		for (int i = 0; i < 1; i++) {
+
+		// how many times should we trian it?
+		int trainTimes = 3;
+		for (int i = 0; i < trainTimes; i++) {
 			System.out.println("Run iteration: " + i);
 			sf.train(initial);
 			System.out.println();
@@ -55,13 +58,15 @@ class BinaryInput implements Inputtable<Double> {
 		ArrayList<Double> list = new ArrayList<Double>();
 		for (String s : line.split("\\s+")) {
 			s = s.trim();
-			if (s.equals("1")) {
-				list.add(1.0);
-			} else if (s.equals("0")) {
-				list.add(0.0);
-			} else {
-				System.err.println("[" + s + "] is not a valid input");
-			}
+			double num = Double.parseDouble(s);
+			list.add(num);
+			// if (s.equals("1")) {
+			// list.add(1.0);
+			// } else if (s.equals("0")) {
+			// list.add(0.0);
+			// } else {
+			// System.err.println("[" + s + "] is not a valid input");
+			// }
 		}
 
 		return list;
