@@ -166,6 +166,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 			ArrayList<Weight> preWeights = secondToLastLayer.getWeightsForNeuronPrev(neuronNum);
 			for (Weight w : preWeights) {
 				w.updateWeight(error);
+
 			}
 		}
 	}
