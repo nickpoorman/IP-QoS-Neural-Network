@@ -10,10 +10,13 @@ public class Weight extends Model<Double, Double> {
 	private double input;
 	private double weight;
 	private double state;
+	private double oldWeight;
+	private double error;
 
 	public Weight() {
 		Random r = new Random();
 		weight = r.nextDouble();
+		oldWeight = weight;
 
 	}
 
@@ -52,6 +55,14 @@ public class Weight extends Model<Double, Double> {
 		this.weight = weight;
 	}
 
+	public double getError() {
+		return this.error;
+	}
+
+	public double getOldWeight() {
+		return this.oldWeight;
+	}
+
 	/**
 	 * This method will change the weight of the current object given an error.
 	 * It uses the current states of the object to update the weight.
@@ -59,7 +70,8 @@ public class Weight extends Model<Double, Double> {
 	 * @param error
 	 */
 	public void updateWeight(double error) {
+		this.error = error;
+		this.oldWeight = weight;
 		this.weight = this.weight + (error * this.input);
-
 	}
 }

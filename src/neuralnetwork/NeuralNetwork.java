@@ -146,7 +146,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 
 		// ADJUST THE WEIGHTS
 
-		// get the last layer
+		// get the output layer
 		Layer lastLayer = this.layers.get(this.layers.size() - 1);
 
 		// get the layer before the last one
@@ -166,6 +166,33 @@ public class NeuralNetwork extends Model<Double, Double> {
 			ArrayList<Weight> preWeights = secondToLastLayer.getWeightsForNeuronPrev(neuronNum);
 			for (Weight w : preWeights) {
 				w.updateWeight(error);
+
+			}
+		}
+
+		// adjust the inner layer weights
+		for (int layerNum = this.layers.size() - 2; layerNum > 0; layerNum--) {
+			Layer layer = this.layers.get(layerNum);
+			Layer prevLayer = this.layers.get(layerNum - 1);
+
+			// we need to get the error of the weights in the previous layer
+			// for each neuron in the previous layer get their weights
+
+			// lets start by getting one neuron
+			ArrayList<Neuron> layerNeurons = layer.getNeurons();
+			for (int neuronNum = 0; neuronNum < layerNeurons.size(); neuronNum++) {
+				Neuron n = layerNeurons.get(neuronNum);
+
+				// get all of its weights
+				ArrayList<Weight> layerWeights = layer.getWeightsForNeuron(n);
+
+				int totalError = 0;
+				// multiply of the old weight and the error
+				// and sum them all up
+				for (int weightNum = 0; weightNum < layerWeights.size(); weightNum++) {
+					Weight w = layerWeights.get(weightNum);
+					totalError += (w.getError() * w.getOldWeight());
+				}
 
 			}
 		}
