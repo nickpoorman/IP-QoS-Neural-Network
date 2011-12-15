@@ -43,12 +43,11 @@ public class NeuralNetwork extends Model<Double, Double> {
 		for (int runNum = 0; runNum < this.timesToRunNetwork; runNum++) {
 			ArrayList<Double> newState = new ArrayList<Double>();
 			// start by setting the state of the input neurons to be the input
-			// of
-			// the network
+			// of the network
 			if (NeuralNetwork.DEBUG) System.out.println("Initalizing input neurons");
-			ArrayList<Neuron> neurons = this.layers.get(0).getNeurons();
-			for (int i = 0; i < neurons.size(); i++) {
-				Neuron neuron = neurons.get(i);
+			ArrayList<Neuron> localNeurons = this.layers.get(0).getNeurons();
+			for (int i = 0; i < localNeurons.size(); i++) {
+				Neuron neuron = localNeurons.get(i);
 				// this process will initialize the Neuron
 				neuron.clear();
 				ArrayList<Double> tmp = new ArrayList<Double>();
@@ -102,7 +101,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 					}
 
 					// SET WEIGHTS OF CURRENT LAYER
-					if (layerNum == (this.layers.size() - 1)) {
+					if (layerNum == (this.layers.size() - 1)) { // last layer
 						if (NeuralNetwork.DEBUG) System.out.println("Setting output to network at layer: " + layerNum);
 						// we are at the end so simply output the state to the
 						// network
@@ -196,7 +195,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 
 				double outE = n.lambda().get(0);
 				double neuronError = outE * (1 - outE) * totalError;
-				n.setError(neuronError);
+				// n.setError(neuronError);
 
 				// now change all the hidden layer weights
 				ArrayList<Weight> prevLayerWeights = prevLayer.getWeightsForNeuronPrev(neuronNum);

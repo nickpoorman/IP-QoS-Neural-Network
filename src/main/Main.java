@@ -15,17 +15,19 @@ public class Main {
 	public static void main(String[] args) {
 		int[] numNeuronsAtEachLayer = new int[3];
 		numNeuronsAtEachLayer[0] = 2;
-		numNeuronsAtEachLayer[1] = 2;
+		numNeuronsAtEachLayer[1] = 1;
 		numNeuronsAtEachLayer[2] = 1;
 
 		Scanner sc = new Scanner(System.in);
 		System.out.print("Please enter the 32bit IP Address: ");
-		String initial = sc.nextLine();
-		System.out.println();
-		if (initial.split(" ").length != numNeuronsAtEachLayer[0]) {
-			System.err.println("You did not enter enough inputs");
-			return;
-		}
+		// String initial = sc.nextLine();
+		// System.out.println();
+		// if (initial.split(" ").length != numNeuronsAtEachLayer[0]) {
+		// System.err.println("You did not enter enough inputs");
+		// return;
+		// }
+
+		String initial = "1 1";
 
 		double target = 0.5;
 
@@ -57,8 +59,9 @@ class BinaryInput implements Inputtable<Double> {
 		// out of them
 		ArrayList<Double> list = new ArrayList<Double>();
 		for (String s : line.split("\\s+")) {
-			s = s.trim();
+			// s = s.trim();
 			double num = Double.parseDouble(s);
+			System.out.println("Adding : " + num);
 			list.add(num);
 			// if (s.equals("1")) {
 			// list.add(1.0);

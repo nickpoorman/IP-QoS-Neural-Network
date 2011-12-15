@@ -15,7 +15,8 @@ public class Weight extends Model<Double, Double> {
 
 	public Weight() {
 		Random r = new Random();
-		weight = r.nextDouble();
+		// weight = r.nextDouble();
+		weight = 1.0;
 		oldWeight = weight;
 
 	}
@@ -44,6 +45,7 @@ public class Weight extends Model<Double, Double> {
 
 	@Override
 	public void takeInput(ArrayList<Double> input) {
+		System.out.println("W Setting input to: " + input.get(0));
 		this.input = input.get(0);
 	}
 
@@ -70,8 +72,10 @@ public class Weight extends Model<Double, Double> {
 	 * @param error
 	 */
 	public void updateWeight(double error) {
+		if (NeuralNetwork.DEBUG) System.out.println("Error was: " + this.error + " to: " + error);
 		this.error = error;
 		this.oldWeight = weight;
 		this.weight = this.weight + (error * this.input);
+		if (NeuralNetwork.DEBUG) System.out.println("Updating the weight: " + this.oldWeight + " to: " + this.weight);
 	}
 }

@@ -33,6 +33,7 @@ public class Neuron extends Model<Double, Double> {
 		for (Double d : inputs) {
 			tmpState += d.doubleValue();
 		}
+		if (NeuralNetwork.DEBUG) System.out.println("Setting neuron state to: " + tmpState);
 		this.state = tmpState;
 
 		// maybe clear the inputs here?
@@ -56,7 +57,7 @@ public class Neuron extends Model<Double, Double> {
 	 * Clears the inputs used, this should be used when the network is re-run
 	 */
 	public void clear() {
-		this.inputs.clear();
+		this.inputs = new ArrayList<Double>();
 	}
 
 	/**
