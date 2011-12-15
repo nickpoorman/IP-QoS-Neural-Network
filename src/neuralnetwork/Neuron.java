@@ -9,6 +9,7 @@ public class Neuron extends Model<Double, Double> {
 	private double state;
 	private ArrayList<Double> inputs;
 	private boolean inputLayer = false;
+	private double error;
 
 	public Neuron(boolean inputLayer) {
 		this.inputs = new ArrayList<Double>();
@@ -73,5 +74,13 @@ public class Neuron extends Model<Double, Double> {
 	 */
 	public double signmoidDerivative(double x) {
 		return Math.log((-x) / (x - 1));
+	}
+
+	public double getError() {
+		return this.error;
+	}
+
+	public void setError(double error) {
+		this.error = error;
 	}
 }

@@ -178,7 +178,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 			// we need to get the error of the weights in the previous layer
 			// for each neuron in the previous layer get their weights
 
-			// lets start by getting one neuron
+			// lets start by getting each neuron and setting its error
 			ArrayList<Neuron> layerNeurons = layer.getNeurons();
 			for (int neuronNum = 0; neuronNum < layerNeurons.size(); neuronNum++) {
 				Neuron n = layerNeurons.get(neuronNum);
@@ -186,12 +186,23 @@ public class NeuralNetwork extends Model<Double, Double> {
 				// get all of its weights
 				ArrayList<Weight> layerWeights = layer.getWeightsForNeuron(n);
 
-				int totalError = 0;
+				double totalError = 0;
 				// multiply of the old weight and the error
 				// and sum them all up
 				for (int weightNum = 0; weightNum < layerWeights.size(); weightNum++) {
 					Weight w = layerWeights.get(weightNum);
 					totalError += (w.getError() * w.getOldWeight());
+				}
+
+				double outE = n.lambda().get(0);
+				double neuronError = outE * (1 - outE) * totalError;
+				n.setError(neuronError);
+
+				// now change all the hidden layer weights
+				ArrayList<Weight> prevLayerWeights = prevLayer.getWeightsForNeuronPrev(neuronNum);
+				for (int weightNum = 0; weightNum < prevLayerWeights.size(); weightNum++) {
+					Weight w = prevLayerWeights.get(weightNum);
+					w.updateWeight(neuronError);
 				}
 
 			}
