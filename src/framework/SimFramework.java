@@ -14,7 +14,7 @@ public class SimFramework<I, O> {
 		inputFunction = i;
 	}
 
-	public void tick(String line) {
+	public void train(String line) {
 		ArrayList<I> c = inputFunction.input(line);
 		// set the input
 		root.takeInput(c);

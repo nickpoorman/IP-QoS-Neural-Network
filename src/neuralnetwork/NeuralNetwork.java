@@ -16,7 +16,12 @@ public class NeuralNetwork extends Model<Double, Double> {
 
 	private final int timesToRunNetwork;
 
-	public NeuralNetwork(int[] numNeuronsAtLayer) {
+	/**
+	 * target is used to train the network
+	 */
+	private double target;
+
+	public NeuralNetwork(int[] numNeuronsAtLayer, double target) {
 		this.timesToRunNetwork = numNeuronsAtLayer.length + (numNeuronsAtLayer.length - 1);
 
 		state = new ArrayList<Double>();
@@ -139,6 +144,30 @@ public class NeuralNetwork extends Model<Double, Double> {
 			}
 		}
 
+		// ADJUST THE WEIGHTS
+
+		// get the last layer
+		Layer lastLayer = this.layers.get(this.layers.size() - 1);
+
+		// get the layer before the last one
+		Layer secondToLastLayer = this.layers.get(this.layers.size() - 2);
+
+		// get the output neurons
+		ArrayList<Neuron> outputNeurons = lastLayer.getNeurons();
+
+		// now calculate the error for each output neuron
+		// for (Neuron n : outputNeurons) {
+		for (int neuronNum = 0; neuronNum < outputNeurons.size(); neuronNum++) {
+			Neuron n = outputNeurons.get(neuronNum);
+			double out = n.lambda().get(0);
+			double error = out * (1 - out) * (this.target - out);
+
+			// feed that error back into all its weights and update them
+			ArrayList<Weight> preWeights = secondToLastLayer.getWeightsForNeuronPrev(neuronNum);
+			for (Weight w : preWeights) {
+				w.updateWeight(error);
+			}
+		}
 	}
 
 	@Override

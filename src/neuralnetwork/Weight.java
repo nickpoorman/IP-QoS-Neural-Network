@@ -51,4 +51,15 @@ public class Weight extends Model<Double, Double> {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
+
+	/**
+	 * This method will change the weight of the current object given an error.
+	 * It uses the current states of the object to update the weight.
+	 * 
+	 * @param error
+	 */
+	public void updateWeight(double error) {
+		this.weight = this.weight + (error * this.input);
+
+	}
 }

@@ -27,14 +27,16 @@ public class Main {
 			return;
 		}
 
-		NeuralNetwork model = new NeuralNetwork(numNeuronsAtEachLayer);
+		double target = 0.5;
+
+		NeuralNetwork model = new NeuralNetwork(numNeuronsAtEachLayer, target);
 		SimFramework<Double, Double> sf = new SimFramework<Double, Double>(model);
 		sf.takeInputFunction(new BinaryInput());
 		// int runTimes = numNeuronsAtEachLayer.length +
 		// (numNeuronsAtEachLayer.length - 1);
 		for (int i = 0; i < 1; i++) {
 			System.out.println("Run iteration: " + i);
-			sf.tick(initial);
+			sf.train(initial);
 			System.out.println();
 			System.out.println();
 			System.out.println();

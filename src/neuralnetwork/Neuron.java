@@ -8,9 +8,11 @@ public class Neuron extends Model<Double, Double> {
 
 	private double state;
 	private ArrayList<Double> inputs;
+	private boolean inputLayer = false;
 
-	public Neuron() {
+	public Neuron(boolean inputLayer) {
 		this.inputs = new ArrayList<Double>();
+		this.inputLayer = inputLayer;
 	}
 
 	@Override
@@ -41,7 +43,11 @@ public class Neuron extends Model<Double, Double> {
 	@Override
 	public ArrayList<Double> lambda() {
 		ArrayList<Double> tmp = new ArrayList<Double>();
-		tmp.add(this.state);
+		if (inputLayer) {
+			tmp.add(this.state);
+		} else {
+			tmp.add(sigmoid(this.state));
+		}
 		return tmp;
 	}
 
@@ -50,5 +56,22 @@ public class Neuron extends Model<Double, Double> {
 	 */
 	public void clear() {
 		this.inputs.clear();
+	}
+
+	/**
+	 * Sigmoid activation function
+	 */
+	public double sigmoid(double x) {
+		return 1d / (1 + Math.pow(Math.E, -x));
+	}
+
+	/**
+	 * This is used for adjusting the weights
+	 * 
+	 * @param x
+	 * @return
+	 */
+	public double signmoidDerivative(double x) {
+		return Math.log((-x) / (x - 1));
 	}
 }
