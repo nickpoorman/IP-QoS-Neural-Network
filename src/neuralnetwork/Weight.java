@@ -1,8 +1,11 @@
 package neuralnetwork;
 
+import java.util.ArrayList;
 import java.util.Random;
 
-public class Weight {
+import framework.Model;
+
+public class Weight extends Model<Double, Double> {
 
 	private double input;
 	private double weight;
@@ -17,8 +20,11 @@ public class Weight {
 	/**
 	 * This will change the state based on the input and weight
 	 */
+	@Override
 	public void delta() {
 		this.state = input * weight;
+		if (NeuralNetwork.DEBUG) System.out.println("W Input: " + this.input + " weight: " + this.weight);
+		if (NeuralNetwork.DEBUG) System.out.println("W Setting state to: " + this.state);
 	}
 
 	/**
@@ -26,12 +32,16 @@ public class Weight {
 	 * 
 	 * @return
 	 */
-	public double lambda() {
-		return this.state;
+	@Override
+	public ArrayList<Double> lambda() {
+		ArrayList<Double> tmp = new ArrayList<Double>();
+		tmp.add(this.state);
+		return tmp;
 	}
 
-	public void takeInput(double input) {
-		this.input = input;
+	@Override
+	public void takeInput(ArrayList<Double> input) {
+		this.input = input.get(0);
 	}
 
 	public double getWeight() {
@@ -41,5 +51,4 @@ public class Weight {
 	public void setWeight(double weight) {
 		this.weight = weight;
 	}
-
 }

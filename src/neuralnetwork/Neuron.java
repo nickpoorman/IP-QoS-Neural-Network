@@ -2,29 +2,31 @@ package neuralnetwork;
 
 import java.util.ArrayList;
 
-public class Neuron {
+import framework.Model;
+
+public class Neuron extends Model<Double, Double> {
 
 	private double state;
 	private ArrayList<Double> inputs;
 
-	// private ArrayList<Weight> weights;
-
 	public Neuron() {
 		this.inputs = new ArrayList<Double>();
-		// this.weights = new ArrayList<Weight>();
-
 	}
 
-	public void takeInput(double input) {
-		this.inputs.add(input);
+	@Override
+	public void takeInput(ArrayList<Double> input) {
+		for (Double d : input) {
+			this.inputs.add(d);
+		}
 	}
 
 	/**
 	 * This method does the state change on the atomic model (Neuron) It
 	 * calculates based on the inputs
 	 */
+	@Override
 	public void delta() {
-		int tmpState = 0;
+		double tmpState = 0;
 		for (Double d : inputs) {
 			tmpState += d.doubleValue();
 		}
@@ -36,8 +38,11 @@ public class Neuron {
 	/**
 	 * This method outputs the state for this atomic model (Neuron)
 	 */
-	public double lambda() {
-		return this.state;
+	@Override
+	public ArrayList<Double> lambda() {
+		ArrayList<Double> tmp = new ArrayList<Double>();
+		tmp.add(this.state);
+		return tmp;
 	}
 
 	/**

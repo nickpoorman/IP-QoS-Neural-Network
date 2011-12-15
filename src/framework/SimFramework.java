@@ -19,6 +19,9 @@ public class SimFramework<I, O> {
 		// set the input
 		root.takeInput(c);
 
+		// do the delta function
+		root.delta();
+
 		// do the lambda function
 		ArrayList<O> out = root.lambda();
 		for (O o : out) {
@@ -26,7 +29,5 @@ public class SimFramework<I, O> {
 		}
 		System.out.println();
 
-		// do the delta function
-		root.delta();
 	}
 }
