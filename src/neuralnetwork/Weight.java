@@ -80,9 +80,15 @@ public class Weight extends Model<Double, Double> {
 	public void updateWeight(double error) {
 		if (NeuralNetwork.DEBUG)
 			System.out.println("Error was: " + this.error + " to: " + error);
+		
 		this.error = error;
 		this.oldWeight = weight;
+		
+		if (NeuralNetwork.DEBUG)System.out.println("CALCULATING NEW WEIGHT: " + this.weight + " + ("
+				+ error + " * " + this.input + ")");
+		
 		this.weight = this.weight + (error * this.input);
+		
 		if (NeuralNetwork.DEBUG)
 			System.out.println("Updating the weight: " + this.oldWeight
 					+ " to: " + this.weight);

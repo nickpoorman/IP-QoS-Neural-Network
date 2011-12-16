@@ -39,7 +39,7 @@ public class Main {
 		// (numNeuronsAtEachLayer.length - 1);
 
 		// how many times should we trian it?
-		int trainTimes = 6;
+		int trainTimes = 3;
 		for (int i = 0; i < trainTimes; i++) {
 			System.out.println();
 			System.out.println("Run iteration: " + i);
