@@ -27,8 +27,11 @@ public class Weight extends Model<Double, Double> {
 	@Override
 	public void delta() {
 		this.state = input * weight;
-		if (NeuralNetwork.DEBUG) System.out.println("W Input: " + this.input + " weight: " + this.weight);
-		if (NeuralNetwork.DEBUG) System.out.println("W Setting state to: " + this.state);
+		if (NeuralNetwork.DEBUG)
+			System.out.println("W Input: " + this.input + " weight: "
+					+ this.weight);
+		if (NeuralNetwork.DEBUG)
+			System.out.println("W Setting state to: " + this.state);
 	}
 
 	/**
@@ -38,7 +41,8 @@ public class Weight extends Model<Double, Double> {
 	 */
 	@Override
 	public ArrayList<Double> lambda() {
-		if (NeuralNetwork.DEBUG_ONE) System.out.println("WEIGHT OUTPUT: " + this.state);
+		if (NeuralNetwork.DEBUG_ONE)
+			System.out.println("WEIGHT OUTPUT: " + this.state);
 		ArrayList<Double> tmp = new ArrayList<Double>();
 		tmp.add(this.state);
 		return tmp;
@@ -46,7 +50,8 @@ public class Weight extends Model<Double, Double> {
 
 	@Override
 	public void takeInput(ArrayList<Double> input) {
-		if (NeuralNetwork.DEBUG) System.out.println("W Setting input to: " + input.get(0));
+		if (NeuralNetwork.DEBUG)
+			System.out.println("W Setting input to: " + input.get(0));
 		this.input = input.get(0);
 	}
 
@@ -73,10 +78,21 @@ public class Weight extends Model<Double, Double> {
 	 * @param error
 	 */
 	public void updateWeight(double error) {
-		if (NeuralNetwork.DEBUG) System.out.println("Error was: " + this.error + " to: " + error);
+		if (NeuralNetwork.DEBUG)
+			System.out.println("Error was: " + this.error + " to: " + error);
 		this.error = error;
 		this.oldWeight = weight;
 		this.weight = this.weight + (error * this.input);
-		if (NeuralNetwork.DEBUG) System.out.println("Updating the weight: " + this.oldWeight + " to: " + this.weight);
+		if (NeuralNetwork.DEBUG)
+			System.out.println("Updating the weight: " + this.oldWeight
+					+ " to: " + this.weight);
+	}
+
+	/**
+	 * This does nothing for atomic models
+	 */
+	@Override
+	public void train(boolean train) {
+		// STUB
 	}
 }

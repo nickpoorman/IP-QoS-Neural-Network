@@ -23,4 +23,12 @@ public abstract class Model<I, O> {
 	 */
 	public abstract ArrayList<O> lambda();
 
+	/**
+	 * This method really should not be in the model but we use it to train the
+	 * network.
+	 * 
+	 * @param train
+	 */
+	public abstract void train(boolean train);
+
 }

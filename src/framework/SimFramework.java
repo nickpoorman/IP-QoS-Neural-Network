@@ -15,6 +15,8 @@ public class SimFramework<I, O> {
 	}
 
 	public void train(String line) {
+		root.train(true);
+
 		ArrayList<I> c = inputFunction.input(line);
 		// set the input
 		root.takeInput(c);
@@ -23,6 +25,26 @@ public class SimFramework<I, O> {
 		root.delta();
 
 		// do the lambda function
+		ArrayList<O> out = root.lambda();
+		for (O o : out) {
+			System.out.print(o.toString() + " ");
+		}
+		System.out.println();
+
+	}
+
+	public void tick(String line) {
+		root.train(false);
+
+		ArrayList<I> c = inputFunction.input(line);
+		// set the input
+		root.takeInput(c);
+
+		// do the delta function
+		root.delta();
+
+		// do the lambda function
+		System.out.println("FINAL OUTPUT IS: ");
 		ArrayList<O> out = root.lambda();
 		for (O o : out) {
 			System.out.print(o.toString() + " ");

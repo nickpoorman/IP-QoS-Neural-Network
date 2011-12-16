@@ -32,19 +32,23 @@ public class Main {
 		double target = 0.5;
 
 		NeuralNetwork model = new NeuralNetwork(numNeuronsAtEachLayer, target);
-		SimFramework<Double, Double> sf = new SimFramework<Double, Double>(model);
+		SimFramework<Double, Double> sf = new SimFramework<Double, Double>(
+				model);
 		sf.takeInputFunction(new BinaryInput());
 		// int runTimes = numNeuronsAtEachLayer.length +
 		// (numNeuronsAtEachLayer.length - 1);
 
 		// how many times should we trian it?
-		int trainTimes = 3;
+		int trainTimes = 6;
 		for (int i = 0; i < trainTimes; i++) {
 			System.out.println();
 			System.out.println("Run iteration: " + i);
 			sf.train(initial);
 			System.out.println();
 		}
+
+		sf.tick(initial);
+
 	}
 }
 
@@ -58,7 +62,8 @@ class BinaryInput implements Inputtable<Double> {
 		for (String s : line.split("\\s+")) {
 			// s = s.trim();
 			double num = Double.parseDouble(s);
-			if (NeuralNetwork.DEBUG) System.out.println("Adding : " + num);
+			if (NeuralNetwork.DEBUG)
+				System.out.println("Adding : " + num);
 			list.add(num);
 			// if (s.equals("1")) {
 			// list.add(1.0);

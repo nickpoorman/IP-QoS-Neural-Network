@@ -32,7 +32,8 @@ public class Neuron extends Model<Double, Double> {
 		for (Double d : inputs) {
 			tmpState += d.doubleValue();
 		}
-		if (NeuralNetwork.DEBUG) System.out.println("Setting neuron state to: " + tmpState);
+		if (NeuralNetwork.DEBUG)
+			System.out.println("Setting neuron state to: " + tmpState);
 		this.state = tmpState;
 
 		// maybe clear the inputs here?
@@ -45,10 +46,14 @@ public class Neuron extends Model<Double, Double> {
 	public ArrayList<Double> lambda() {
 		ArrayList<Double> tmp = new ArrayList<Double>();
 		if (inputLayer) {
-			if (NeuralNetwork.DEBUG_ONE) System.out.println("N: NEURON OUTPUT wo/ sigmoid: " + this.state);
+			if (NeuralNetwork.DEBUG_ONE)
+				System.out.println("N: NEURON OUTPUT wo/ sigmoid: "
+						+ this.state);
 			tmp.add(this.state);
 		} else {
-			if (NeuralNetwork.DEBUG_ONE) System.out.println("N: NEURON OUTPUT w/ sigmoid: " + this.state);
+			if (NeuralNetwork.DEBUG_ONE)
+				System.out
+						.println("N: NEURON OUTPUT w/ sigmoid: " + this.state);
 			tmp.add(sigmoid(this.state));
 		}
 		return tmp;
@@ -83,7 +88,8 @@ public class Neuron extends Model<Double, Double> {
 	}
 
 	public void setError(double error) {
-		System.out.println("Error was: " + this.error + " error is now: " + error);
+		System.out.println("Error was: " + this.error + " error is now: "
+				+ error);
 		this.error = error;
 	}
 
@@ -93,5 +99,14 @@ public class Neuron extends Model<Double, Double> {
 
 	public void setInputLayer(boolean inputLayer) {
 		this.inputLayer = inputLayer;
+	}
+
+	/**
+	 * This does nothing for atomic models
+	 */
+	@Override
+	public void train(boolean train) {
+		// STUB
+
 	}
 }
