@@ -28,8 +28,11 @@ public class NeuralNetwork extends Model<Double, Double> {
 	private double target;
 
 	public NeuralNetwork(int[] numNeuronsAtLayer, double target) {
-		this.timesToRunNetwork = numNeuronsAtLayer.length
-				+ (numNeuronsAtLayer.length - 1);
+		this.timesToRunNetwork = numNeuronsAtLayer.length + (numNeuronsAtLayer.length - 1);
+		// this.timesToRunNetwork = numNeuronsAtLayer.length +
+		// (numNeuronsAtLayer.length);
+
+		this.target = target;
 
 		state = new ArrayList<Double>();
 
@@ -41,8 +44,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 				// we are at the last layer so dont create weights
 				this.layers.add(new Layer(numNeuronsAtLayer[i], 0));
 			} else {
-				this.layers.add(new Layer(numNeuronsAtLayer[i],
-						numNeuronsAtLayer[i + 1]));
+				this.layers.add(new Layer(numNeuronsAtLayer[i], numNeuronsAtLayer[i + 1]));
 			}
 		}
 	}
@@ -124,16 +126,14 @@ public class NeuralNetwork extends Model<Double, Double> {
 						// do nothing cause we did it up there ^?
 					} else {
 						if (NeuralNetwork.DEBUG)
-							System.out.println("Setting neurons of layer: "
-									+ layerNum + " neuron: " + neuronNum);
+							System.out.println("Setting neurons of layer: " + layerNum + " neuron: " + neuronNum);
 						// take input from the weights
 						// should be the first n number of neurons
 
 						// need to start this loop at the neuron number * the
 						// number
 						// of neurons
-						ArrayList<Weight> preWeights = prevLayer
-								.getWeightsForNeuronPrev(neuronNum);
+						ArrayList<Weight> preWeights = prevLayer.getWeightsForNeuronPrev(neuronNum);
 						// clear the neurons current input
 						n.clear();
 						for (Weight w : preWeights) {
@@ -144,9 +144,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 					// SET WEIGHTS OF CURRENT LAYER
 					if (layerNum == (this.layers.size() - 1)) { // last layer
 						if (NeuralNetwork.DEBUG)
-							System.out
-									.println("Setting output to network at layer: "
-											+ layerNum);
+							System.out.println("Setting output to network at layer: " + layerNum);
 						// we are at the end so simply output the state to the
 						// network
 
@@ -158,21 +156,16 @@ public class NeuralNetwork extends Model<Double, Double> {
 						}
 					} else {
 						if (NeuralNetwork.DEBUG)
-							System.out.println("Setting weights of layer: "
-									+ layerNum + " for neuron: " + neuronNum);
+							System.out.println("Setting weights of layer: " + layerNum + " for neuron: " + neuronNum);
 						// call the lambda function of all the neurons
 						double output = n.lambda().get(0);
 						if (NeuralNetwork.DEBUG)
-							System.out.println("layer: " + layerNum
-									+ " neuron: " + neuronNum
-									+ " neuron output is: " + output);
+							System.out.println("layer: " + layerNum + " neuron: " + neuronNum + " neuron output is: " + output);
 						if (NeuralNetwork.DEBUG)
-							System.out.println("Input layer?: "
-									+ n.isInputLayer());
+							System.out.println("Input layer?: " + n.isInputLayer());
 
 						// then feed that output into the respective weights
-						ArrayList<Weight> neuronWeights = layer
-								.getWeightsForNeuron(n);
+						ArrayList<Weight> neuronWeights = layer.getWeightsForNeuron(n);
 						for (Weight weight : neuronWeights) {
 							ArrayList<Double> tmpL = new ArrayList<Double>();
 							tmpL.add(new Double(output));
@@ -222,10 +215,12 @@ public class NeuralNetwork extends Model<Double, Double> {
 				Neuron n = outputNeurons.get(neuronNum);
 				double out = n.lambda().get(0);
 				double error = out * (1 - out) * (this.target - out);
+				System.out.println("Target is: " + this.target);
+				if (NeuralNetwork.DEBUG)
+					System.out.println("Calculating ERROR: " + error + " = " + out + " * (1 - " + out + ") * (" + this.target + " - " + out);
 
 				// feed that error back into all its weights and update them
-				ArrayList<Weight> preWeights = secondToLastLayer
-						.getWeightsForNeuronPrev(neuronNum);
+				ArrayList<Weight> preWeights = secondToLastLayer.getWeightsForNeuronPrev(neuronNum);
 				for (Weight w : preWeights) {
 					w.updateWeight(error);
 
@@ -246,8 +241,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 					Neuron n = layerNeurons.get(neuronNum);
 
 					// get all of its weights
-					ArrayList<Weight> layerWeights = layer
-							.getWeightsForNeuron(n);
+					ArrayList<Weight> layerWeights = layer.getWeightsForNeuron(n);
 
 					double totalError = 0;
 					// multiply of the old weight and the error
@@ -262,8 +256,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 					// n.setError(neuronError);
 
 					// now change all the hidden layer weights
-					ArrayList<Weight> prevLayerWeights = prevLayer
-							.getWeightsForNeuronPrev(neuronNum);
+					ArrayList<Weight> prevLayerWeights = prevLayer.getWeightsForNeuronPrev(neuronNum);
 					for (int weightNum = 0; weightNum < prevLayerWeights.size(); weightNum++) {
 						Weight w = prevLayerWeights.get(weightNum);
 						w.updateWeight(neuronError);
