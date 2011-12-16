@@ -15,8 +15,8 @@ public class Weight extends Model<Double, Double> {
 
 	public Weight() {
 		Random r = new Random();
-		// weight = r.nextDouble();
-		weight = 1.0;
+		weight = r.nextDouble();
+		// weight = 1.0;
 		oldWeight = weight;
 
 	}
@@ -28,8 +28,7 @@ public class Weight extends Model<Double, Double> {
 	public void delta() {
 		this.state = input * weight;
 		if (NeuralNetwork.DEBUG)
-			System.out.println("W Input: " + this.input + " weight: "
-					+ this.weight);
+			System.out.println("W Input: " + this.input + " weight: " + this.weight);
 		if (NeuralNetwork.DEBUG)
 			System.out.println("W Setting state to: " + this.state);
 	}
@@ -80,18 +79,17 @@ public class Weight extends Model<Double, Double> {
 	public void updateWeight(double error) {
 		if (NeuralNetwork.DEBUG)
 			System.out.println("Error was: " + this.error + " to: " + error);
-		
+
 		this.error = error;
 		this.oldWeight = weight;
-		
-		if (NeuralNetwork.DEBUG)System.out.println("CALCULATING NEW WEIGHT: " + this.weight + " + ("
-				+ error + " * " + this.input + ")");
-		
-		this.weight = this.weight + (error * this.input);
-		
+
 		if (NeuralNetwork.DEBUG)
-			System.out.println("Updating the weight: " + this.oldWeight
-					+ " to: " + this.weight);
+			System.out.println("CALCULATING NEW WEIGHT: " + this.weight + " + (" + error + " * " + this.input + ")");
+
+		this.weight = this.weight + (error * this.input);
+
+		if (NeuralNetwork.DEBUG)
+			System.out.println("Updating the weight: " + this.oldWeight + " to: " + this.weight);
 	}
 
 	/**

@@ -6,9 +6,10 @@ import framework.Model;
 
 public class NeuralNetwork extends Model<Double, Double> {
 
-	public static final boolean DEBUG = true;
-	public static final boolean DEBUG_ONE = true;
-	public static final boolean DEBUG_TWO = true;
+	public static final boolean DEBUG = false;
+	public static final boolean DEBUG_ONE = false;
+	// pre defined weights
+	public static final boolean DEBUG_TWO = false;
 
 	private boolean init = true;
 
@@ -215,7 +216,8 @@ public class NeuralNetwork extends Model<Double, Double> {
 				Neuron n = outputNeurons.get(neuronNum);
 				double out = n.lambda().get(0);
 				double error = out * (1 - out) * (this.target - out);
-				System.out.println("Target is: " + this.target);
+				if (NeuralNetwork.DEBUG)
+					System.out.println("Target is: " + this.target);
 				if (NeuralNetwork.DEBUG)
 					System.out.println("Calculating ERROR: " + error + " = " + out + " * (1 - " + out + ") * (" + this.target + " - " + out);
 
