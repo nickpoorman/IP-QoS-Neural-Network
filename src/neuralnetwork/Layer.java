@@ -19,7 +19,7 @@ public class Layer {
 
 		// create all the neurons
 		for (int i = 0; i < numNeurons; i++) {
-			this.addNeuron(new Neuron((i == 0) ? true : false));
+			this.addNeuron(new Neuron());
 		}
 
 		// create all the weights

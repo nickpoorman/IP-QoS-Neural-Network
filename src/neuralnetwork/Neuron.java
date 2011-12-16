@@ -11,9 +11,8 @@ public class Neuron extends Model<Double, Double> {
 	private boolean inputLayer = false;
 	private double error;
 
-	public Neuron(boolean inputLayer) {
+	public Neuron() {
 		this.inputs = new ArrayList<Double>();
-		this.inputLayer = inputLayer;
 	}
 
 	@Override
@@ -46,8 +45,10 @@ public class Neuron extends Model<Double, Double> {
 	public ArrayList<Double> lambda() {
 		ArrayList<Double> tmp = new ArrayList<Double>();
 		if (inputLayer) {
+			if (NeuralNetwork.DEBUG_ONE) System.out.println("N: NEURON OUTPUT wo/ sigmoid: " + this.state);
 			tmp.add(this.state);
 		} else {
+			if (NeuralNetwork.DEBUG_ONE) System.out.println("N: NEURON OUTPUT w/ sigmoid: " + this.state);
 			tmp.add(sigmoid(this.state));
 		}
 		return tmp;
@@ -84,5 +85,13 @@ public class Neuron extends Model<Double, Double> {
 	public void setError(double error) {
 		System.out.println("Error was: " + this.error + " error is now: " + error);
 		this.error = error;
+	}
+
+	public boolean isInputLayer() {
+		return this.inputLayer;
+	}
+
+	public void setInputLayer(boolean inputLayer) {
+		this.inputLayer = inputLayer;
 	}
 }

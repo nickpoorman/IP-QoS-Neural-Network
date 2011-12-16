@@ -15,7 +15,7 @@ public class Main {
 	public static void main(String[] args) {
 		int[] numNeuronsAtEachLayer = new int[3];
 		numNeuronsAtEachLayer[0] = 2;
-		numNeuronsAtEachLayer[1] = 1;
+		numNeuronsAtEachLayer[1] = 2;
 		numNeuronsAtEachLayer[2] = 1;
 
 		Scanner sc = new Scanner(System.in);
@@ -27,7 +27,7 @@ public class Main {
 		// return;
 		// }
 
-		String initial = "1 1";
+		String initial = ".35 .9";
 
 		double target = 0.5;
 
@@ -40,12 +40,9 @@ public class Main {
 		// how many times should we trian it?
 		int trainTimes = 3;
 		for (int i = 0; i < trainTimes; i++) {
+			System.out.println();
 			System.out.println("Run iteration: " + i);
 			sf.train(initial);
-			System.out.println();
-			System.out.println();
-			System.out.println();
-			System.out.println();
 			System.out.println();
 		}
 	}
@@ -61,7 +58,7 @@ class BinaryInput implements Inputtable<Double> {
 		for (String s : line.split("\\s+")) {
 			// s = s.trim();
 			double num = Double.parseDouble(s);
-			System.out.println("Adding : " + num);
+			if (NeuralNetwork.DEBUG) System.out.println("Adding : " + num);
 			list.add(num);
 			// if (s.equals("1")) {
 			// list.add(1.0);

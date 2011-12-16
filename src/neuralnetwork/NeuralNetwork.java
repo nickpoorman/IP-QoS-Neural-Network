@@ -7,6 +7,10 @@ import framework.Model;
 public class NeuralNetwork extends Model<Double, Double> {
 
 	public static final boolean DEBUG = true;
+	public static final boolean DEBUG_ONE = true;
+	public static final boolean DEBUG_TWO = true;
+
+	private boolean init = true;
 
 	private ArrayList<Layer> layers;
 
@@ -48,6 +52,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 			ArrayList<Neuron> localNeurons = this.layers.get(0).getNeurons();
 			for (int i = 0; i < localNeurons.size(); i++) {
 				Neuron neuron = localNeurons.get(i);
+				neuron.setInputLayer(true);
 				// this process will initialize the Neuron
 				neuron.clear();
 				ArrayList<Double> tmp = new ArrayList<Double>();
@@ -55,6 +60,26 @@ public class NeuralNetwork extends Model<Double, Double> {
 				neuron.takeInput(tmp);
 				neuron.delta();
 				neuron.clear();
+			}
+
+			// we are going to set all the weights statically for testing here
+			if (NeuralNetwork.DEBUG_TWO) {
+				if (this.init) {
+					// first neurons weights
+					this.layers.get(0).getWeights().get(0).setWeight(.1);
+					this.layers.get(0).getWeights().get(2).setWeight(.4);
+
+					// second neurons weights
+					this.layers.get(0).getWeights().get(1).setWeight(.8);
+					this.layers.get(0).getWeights().get(3).setWeight(.6);
+
+					// third neurons weights
+					this.layers.get(1).getWeights().get(0).setWeight(.3);
+
+					// fourth neurons weights
+					this.layers.get(1).getWeights().get(1).setWeight(.9);
+					this.init = false;
+				}
 			}
 
 			// set the input for each of the layers
@@ -76,8 +101,9 @@ public class NeuralNetwork extends Model<Double, Double> {
 
 				// set the input from the given layer to the next layer
 				Layer layer = this.layers.get(layerNum);
-				for (int neuronNum = 0; neuronNum < layer.getNeurons().size(); neuronNum++) {
-					Neuron n = layer.getNeurons().get(neuronNum);
+				ArrayList<Neuron> layerNeurons = layer.getNeurons();
+				for (int neuronNum = 0; neuronNum < layerNeurons.size(); neuronNum++) {
+					Neuron n = layerNeurons.get(neuronNum);
 
 					// SET NEURONS OF CURRENT LAYER
 					// the first layer doesn't take input so we do this manually
@@ -85,7 +111,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 					if (layerNum == 0) {
 						// do nothing cause we did it up there ^?
 					} else {
-						if (NeuralNetwork.DEBUG) System.out.println("Setting neurons of layer: " + layerNum);
+						if (NeuralNetwork.DEBUG) System.out.println("Setting neurons of layer: " + layerNum + " neuron: " + neuronNum);
 						// take input from the weights
 						// should be the first n number of neurons
 
@@ -105,19 +131,25 @@ public class NeuralNetwork extends Model<Double, Double> {
 						if (NeuralNetwork.DEBUG) System.out.println("Setting output to network at layer: " + layerNum);
 						// we are at the end so simply output the state to the
 						// network
+
+						// I think this needs to be changed
+						// we should only make output for the network when it
+						// has run through so many iterations
 						for (Double d : n.lambda()) {
 							newState.add(d.doubleValue());
 						}
 					} else {
-						if (NeuralNetwork.DEBUG) System.out.println("Setting weights of layer: " + layerNum);
+						if (NeuralNetwork.DEBUG) System.out.println("Setting weights of layer: " + layerNum + " for neuron: " + neuronNum);
 						// call the lambda function of all the neurons
 						double output = n.lambda().get(0);
+						if (NeuralNetwork.DEBUG) System.out.println("layer: " + layerNum + " neuron: " + neuronNum + " neuron output is: " + output);
+						if (NeuralNetwork.DEBUG) System.out.println("Input layer?: " + n.isInputLayer());
 
 						// then feed that output into the respective weights
 						ArrayList<Weight> neuronWeights = layer.getWeightsForNeuron(n);
 						for (Weight weight : neuronWeights) {
 							ArrayList<Double> tmpL = new ArrayList<Double>();
-							tmpL.add(output);
+							tmpL.add(new Double(output));
 							weight.takeInput(tmpL);
 						}
 					}

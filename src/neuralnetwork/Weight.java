@@ -38,6 +38,7 @@ public class Weight extends Model<Double, Double> {
 	 */
 	@Override
 	public ArrayList<Double> lambda() {
+		if (NeuralNetwork.DEBUG_ONE) System.out.println("WEIGHT OUTPUT: " + this.state);
 		ArrayList<Double> tmp = new ArrayList<Double>();
 		tmp.add(this.state);
 		return tmp;
@@ -45,7 +46,7 @@ public class Weight extends Model<Double, Double> {
 
 	@Override
 	public void takeInput(ArrayList<Double> input) {
-		System.out.println("W Setting input to: " + input.get(0));
+		if (NeuralNetwork.DEBUG) System.out.println("W Setting input to: " + input.get(0));
 		this.input = input.get(0);
 	}
 
