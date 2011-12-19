@@ -14,9 +14,10 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		int[] numNeuronsAtEachLayer = new int[3];
-		numNeuronsAtEachLayer[0] = 32;
+		numNeuronsAtEachLayer[0] = 2;
 		// Hecht-Nielsen theorem
-		numNeuronsAtEachLayer[1] = (numNeuronsAtEachLayer[0] * 2) + 1;
+		// numNeuronsAtEachLayer[1] = (numNeuronsAtEachLayer[0] * 2) + 1;
+		numNeuronsAtEachLayer[1] = 2;
 		numNeuronsAtEachLayer[2] = 1;
 
 		Scanner sc = new Scanner(System.in);
@@ -28,51 +29,51 @@ public class Main {
 		// return;
 		// }
 
-		// String initial = ".35 .9";
+		String actual = ".35 .9";
 
-		String initial = "192.168.1.10";
-
-		String[] sp = initial.split("\\.");
-		String[] bin = new String[sp.length];
-		// System.out.println("len: " + sp.length);
-		for (int i = 0; i < sp.length; i++) {
-			int a = Integer.parseInt(sp[i]);
-			String outA = Integer.toBinaryString(a);
-			while (outA.length() < 8) {
-				outA = "0" + outA;
-			}
-			bin[i] = outA;
-			// System.out.println(outA);
-		}
-
-		String actual = "";
-		actual = bin[0] + bin[1] + bin[2] + bin[3];
-		actual = actual.replaceAll(".(?=.)", "$0 ");
+		// String initial = "192.168.1.10";
+		//
+		// String[] sp = initial.split("\\.");
+		// String[] bin = new String[sp.length];
+		// // System.out.println("len: " + sp.length);
+		// for (int i = 0; i < sp.length; i++) {
+		// int a = Integer.parseInt(sp[i]);
+		// String outA = Integer.toBinaryString(a);
+		// while (outA.length() < 8) {
+		// outA = "0" + outA;
+		// }
+		// bin[i] = outA;
+		// // System.out.println(outA);
+		// }
+		//
+		// String actual = "";
+		// actual = bin[0] + bin[1] + bin[2] + bin[3];
+		// actual = actual.replaceAll(".(?=.)", "$0 ");
 		// System.out.println("Input: " + actual);
 
 		// ///// test something else
-		String initial2 = "127.0.0.1";
+		// String initial2 = "127.0.0.1";
+		//
+		// String[] sp2 = initial2.split("\\.");
+		// String[] bin2 = new String[sp2.length];
+		// // System.out.println("len: " + sp.length);
+		// for (int i2 = 0; i2 < sp2.length; i2++) {
+		// int a2 = Integer.parseInt(sp2[i2]);
+		// String outA2 = Integer.toBinaryString(a2);
+		// while (outA2.length() < 8) {
+		// outA2 = "0" + outA2;
+		// }
+		// bin2[i2] = outA2;
+		// // System.out.println(outA);
+		// }
+		//
+		// String actual2 = "";
+		// actual2 = bin2[0] + bin2[1] + bin2[2] + bin2[3];
+		// actual2 = actual2.replaceAll(".(?=.)", "$0 ");
+		// // System.out.println("Input: " + actual2);
 
-		String[] sp2 = initial2.split("\\.");
-		String[] bin2 = new String[sp2.length];
-		// System.out.println("len: " + sp.length);
-		for (int i2 = 0; i2 < sp2.length; i2++) {
-			int a2 = Integer.parseInt(sp2[i2]);
-			String outA2 = Integer.toBinaryString(a2);
-			while (outA2.length() < 8) {
-				outA2 = "0" + outA2;
-			}
-			bin2[i2] = outA2;
-			// System.out.println(outA);
-		}
-
-		String actual2 = "";
-		actual2 = bin2[0] + bin2[1] + bin2[2] + bin2[3];
-		actual2 = actual2.replaceAll(".(?=.)", "$0 ");
-		// System.out.println("Input: " + actual2);
-
-		double target = 1;
-		double target2 = 1;
+		double target = .3;
+		// double target2 = 0;
 
 		NeuralNetwork model = new NeuralNetwork(numNeuronsAtEachLayer, target);
 		SimFramework<Double, Double> sf = new SimFramework<Double, Double>(model);

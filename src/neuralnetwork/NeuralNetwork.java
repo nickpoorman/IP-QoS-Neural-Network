@@ -9,7 +9,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 	public static final boolean DEBUG = false;
 	public static final boolean DEBUG_ONE = false;
 	// pre defined weights
-	public static final boolean DEBUG_TWO = false;
+	public static final boolean DEBUG_TWO = true;
 
 	private boolean init = true;
 
