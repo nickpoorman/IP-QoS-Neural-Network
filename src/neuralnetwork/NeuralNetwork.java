@@ -1,23 +1,24 @@
 package neuralnetwork;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import framework.Model;
 
-public class NeuralNetwork extends Model<Double, Double> {
+public class NeuralNetwork extends Model<BigDecimal, BigDecimal> {
 
 	public static final boolean DEBUG = false;
 	public static final boolean DEBUG_ONE = false;
-	// pre defined weights
-	public static final boolean DEBUG_TWO = true;
+	// pre defined weights - use only with 2 2 1 network
+	public static final boolean DEBUG_TWO = false;
 
 	private boolean init = true;
 
 	private ArrayList<Layer> layers;
 
-	private ArrayList<Double> input;
+	private ArrayList<BigDecimal> input;
 
-	private ArrayList<Double> state;
+	private ArrayList<BigDecimal> state;
 
 	private final int timesToRunNetwork;
 
@@ -26,23 +27,19 @@ public class NeuralNetwork extends Model<Double, Double> {
 	/**
 	 * target is used to train the network
 	 */
-	private double target;
+	private ArrayList<BigDecimal> target; // don't forget to set this
 
-	public NeuralNetwork(int[] numNeuronsAtLayer, double target) {
+	public NeuralNetwork(int[] numNeuronsAtLayer) {
 		this.timesToRunNetwork = numNeuronsAtLayer.length + (numNeuronsAtLayer.length - 1);
-		// this.timesToRunNetwork = numNeuronsAtLayer.length +
-		// (numNeuronsAtLayer.length);
 
-		this.target = target;
-
-		state = new ArrayList<Double>();
+		state = new ArrayList<BigDecimal>();
 
 		this.layers = new ArrayList<Layer>();
 
 		// add all the layers
 		for (int i = 0; i < numNeuronsAtLayer.length; i++) {
 			if ((i + 1) == numNeuronsAtLayer.length) {
-				// we are at the last layer so dont create weights
+				// we are at the last layer so don't create weights
 				this.layers.add(new Layer(numNeuronsAtLayer[i], 0));
 			} else {
 				this.layers.add(new Layer(numNeuronsAtLayer[i], numNeuronsAtLayer[i + 1]));
@@ -59,54 +56,54 @@ public class NeuralNetwork extends Model<Double, Double> {
 	 */
 	public void delta() {
 		for (int runNum = 0; runNum < this.timesToRunNetwork; runNum++) {
-			ArrayList<Double> newState = new ArrayList<Double>();
+			ArrayList<BigDecimal> newState = new ArrayList<BigDecimal>();
 			// start by setting the state of the input neurons to be the input
 			// of the network
 			if (NeuralNetwork.DEBUG)
 				System.out.println("Initalizing input neurons");
 			ArrayList<Neuron> localNeurons = this.layers.get(0).getNeurons();
+			int ptr = 0;
 			for (int i = 0; i < localNeurons.size(); i++) {
 				Neuron neuron = localNeurons.get(i);
 				neuron.setInputLayer(true);
 				// this process will initialize the Neuron
 				neuron.clear();
-				ArrayList<Double> tmp = new ArrayList<Double>();
+				ArrayList<BigDecimal> tmp = new ArrayList<BigDecimal>();
 				tmp.add(input.get(i));
 				neuron.takeInput(tmp);
 				neuron.delta();
 				neuron.clear();
+				ptr++;
+			}
+
+			this.target = new ArrayList<BigDecimal>();
+			// now adjust the targets
+			for (int i = ptr; i < this.input.size(); i++) {
+				this.target.add(input.get(ptr));
 			}
 
 			// we are going to set all the weights statically for testing here
 			if (NeuralNetwork.DEBUG_TWO) {
 				if (this.init) {
 					// first neurons weights
-					this.layers.get(0).getWeights().get(0).setWeight(.1);
-					this.layers.get(0).getWeights().get(2).setWeight(.4);
+					this.layers.get(0).getWeights().get(0).setWeight(new BigDecimal(.1));
+					this.layers.get(0).getWeights().get(2).setWeight(new BigDecimal(.4));
 
 					// second neurons weights
-					this.layers.get(0).getWeights().get(1).setWeight(.8);
-					this.layers.get(0).getWeights().get(3).setWeight(.6);
+					this.layers.get(0).getWeights().get(1).setWeight(new BigDecimal(.8));
+					this.layers.get(0).getWeights().get(3).setWeight(new BigDecimal(.6));
 
 					// third neurons weights
-					this.layers.get(1).getWeights().get(0).setWeight(.3);
+					this.layers.get(1).getWeights().get(0).setWeight(new BigDecimal(.3));
 
 					// fourth neurons weights
-					this.layers.get(1).getWeights().get(1).setWeight(.9);
+					this.layers.get(1).getWeights().get(1).setWeight(new BigDecimal(.9));
 					this.init = false;
 				}
 			}
 
 			// set the input for each of the layers
 			for (int layerNum = 0; layerNum < this.layers.size(); layerNum++) {
-				// get the next layer
-				// Layer nextLayer = null;
-				// if ((layerNum + 1) < this.layers.size()) {
-				// nextLayer = this.layers.get(layerNum + 1);
-				// } else {
-				// System.out.println("DEBUG at end node");
-				// }
-
 				Layer prevLayer = null;
 				if ((layerNum - 1) >= 0) {
 					prevLayer = this.layers.get(layerNum - 1);
@@ -124,7 +121,7 @@ public class NeuralNetwork extends Model<Double, Double> {
 					// the first layer doesn't take input so we do this manually
 					// from the network
 					if (layerNum == 0) {
-						// do nothing cause we did it up there ^?
+						// do nothing cause we did it up there ^
 					} else {
 						if (NeuralNetwork.DEBUG)
 							System.out.println("Setting neurons of layer: " + layerNum + " neuron: " + neuronNum);
@@ -152,14 +149,14 @@ public class NeuralNetwork extends Model<Double, Double> {
 						// I think this needs to be changed
 						// we should only make output for the network when it
 						// has run through so many iterations
-						for (Double d : n.lambda()) {
-							newState.add(d.doubleValue());
+						for (BigDecimal d : n.lambda()) {
+							newState.add(d);
 						}
 					} else {
 						if (NeuralNetwork.DEBUG)
 							System.out.println("Setting weights of layer: " + layerNum + " for neuron: " + neuronNum);
 						// call the lambda function of all the neurons
-						double output = n.lambda().get(0);
+						BigDecimal output = n.lambda().get(0);
 						if (NeuralNetwork.DEBUG)
 							System.out.println("layer: " + layerNum + " neuron: " + neuronNum + " neuron output is: " + output);
 						if (NeuralNetwork.DEBUG)
@@ -168,8 +165,8 @@ public class NeuralNetwork extends Model<Double, Double> {
 						// then feed that output into the respective weights
 						ArrayList<Weight> neuronWeights = layer.getWeightsForNeuron(n);
 						for (Weight weight : neuronWeights) {
-							ArrayList<Double> tmpL = new ArrayList<Double>();
-							tmpL.add(new Double(output));
+							ArrayList<BigDecimal> tmpL = new ArrayList<BigDecimal>();
+							tmpL.add(output);
 							weight.takeInput(tmpL);
 						}
 					}
@@ -214,12 +211,13 @@ public class NeuralNetwork extends Model<Double, Double> {
 			// for (Neuron n : outputNeurons) {
 			for (int neuronNum = 0; neuronNum < outputNeurons.size(); neuronNum++) {
 				Neuron n = outputNeurons.get(neuronNum);
-				double out = n.lambda().get(0);
-				double error = out * (1 - out) * (this.target - out);
+				BigDecimal out = n.lambda().get(0);
+				BigDecimal error = out.multiply((new BigDecimal(1).subtract(out))).multiply((this.target.get(neuronNum).subtract(out)));
 				if (NeuralNetwork.DEBUG)
-					System.out.println("Target is: " + this.target);
+					System.out.println("Target is: " + this.target.get(neuronNum));
 				if (NeuralNetwork.DEBUG)
-					System.out.println("Calculating ERROR: " + error + " = " + out + " * (1 - " + out + ") * (" + this.target + " - " + out);
+					System.out.println("Calculating ERROR: " + error + " = " + out + " * (1 - " + out + ") * (" + this.target.get(neuronNum) + " - "
+							+ out);
 
 				// feed that error back into all its weights and update them
 				ArrayList<Weight> preWeights = secondToLastLayer.getWeightsForNeuronPrev(neuronNum);
@@ -245,17 +243,16 @@ public class NeuralNetwork extends Model<Double, Double> {
 					// get all of its weights
 					ArrayList<Weight> layerWeights = layer.getWeightsForNeuron(n);
 
-					double totalError = 0;
+					BigDecimal totalError = new BigDecimal(0);
 					// multiply of the old weight and the error
 					// and sum them all up
 					for (int weightNum = 0; weightNum < layerWeights.size(); weightNum++) {
 						Weight w = layerWeights.get(weightNum);
-						totalError += (w.getError() * w.getOldWeight());
+						totalError = totalError.add((w.getError().multiply(w.getOldWeight())));
 					}
 
-					double outE = n.lambda().get(0);
-					double neuronError = outE * (1 - outE) * totalError;
-					// n.setError(neuronError);
+					BigDecimal outE = n.lambda().get(0);
+					BigDecimal neuronError = outE.multiply((new BigDecimal(1).subtract(outE))).multiply(totalError);
 
 					// now change all the hidden layer weights
 					ArrayList<Weight> prevLayerWeights = prevLayer.getWeightsForNeuronPrev(neuronNum);
@@ -269,14 +266,14 @@ public class NeuralNetwork extends Model<Double, Double> {
 	}
 
 	@Override
-	public void takeInput(ArrayList<Double> input) {
+	public void takeInput(ArrayList<BigDecimal> input) {
 		this.input = input;
 	}
 
 	/**
 	 * send output to the simulator
 	 */
-	public ArrayList<Double> lambda() {
+	public ArrayList<BigDecimal> lambda() {
 		return this.state;
 	}
 

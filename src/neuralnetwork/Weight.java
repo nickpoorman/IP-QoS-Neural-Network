@@ -1,23 +1,26 @@
 package neuralnetwork;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Random;
 
 import framework.Model;
 
-public class Weight extends Model<Double, Double> {
+public class Weight extends Model<BigDecimal, BigDecimal> {
 
-	private double input;
-	private double weight;
-	private double state;
-	private double oldWeight;
-	private double error;
+	private BigDecimal input = new BigDecimal(0);
+	private BigDecimal weight = new BigDecimal(0);
+	private BigDecimal state = new BigDecimal(0);
+	private BigDecimal oldWeight = new BigDecimal(0);
+	private BigDecimal error = new BigDecimal(0);
 
+	/**
+	 * This constructor will set the weights to a random value.
+	 */
 	public Weight() {
 		Random r = new Random();
-		weight = r.nextDouble();
-		// weight = 1.0;
-		oldWeight = weight;
+		weight = new BigDecimal(r.nextDouble());
+		oldWeight = new BigDecimal(weight.doubleValue());
 
 	}
 
@@ -26,7 +29,7 @@ public class Weight extends Model<Double, Double> {
 	 */
 	@Override
 	public void delta() {
-		this.state = input * weight;
+		this.state = input.multiply(weight);
 		if (NeuralNetwork.DEBUG)
 			System.out.println("W Input: " + this.input + " weight: " + this.weight);
 		if (NeuralNetwork.DEBUG)
@@ -39,34 +42,34 @@ public class Weight extends Model<Double, Double> {
 	 * @return
 	 */
 	@Override
-	public ArrayList<Double> lambda() {
+	public ArrayList<BigDecimal> lambda() {
 		if (NeuralNetwork.DEBUG_ONE)
 			System.out.println("WEIGHT OUTPUT: " + this.state);
-		ArrayList<Double> tmp = new ArrayList<Double>();
+		ArrayList<BigDecimal> tmp = new ArrayList<BigDecimal>();
 		tmp.add(this.state);
 		return tmp;
 	}
 
 	@Override
-	public void takeInput(ArrayList<Double> input) {
+	public void takeInput(ArrayList<BigDecimal> input) {
 		if (NeuralNetwork.DEBUG)
 			System.out.println("W Setting input to: " + input.get(0));
 		this.input = input.get(0);
 	}
 
-	public double getWeight() {
+	public BigDecimal getWeight() {
 		return this.weight;
 	}
 
-	public void setWeight(double weight) {
+	public void setWeight(BigDecimal weight) {
 		this.weight = weight;
 	}
 
-	public double getError() {
+	public BigDecimal getError() {
 		return this.error;
 	}
 
-	public double getOldWeight() {
+	public BigDecimal getOldWeight() {
 		return this.oldWeight;
 	}
 
@@ -76,7 +79,7 @@ public class Weight extends Model<Double, Double> {
 	 * 
 	 * @param error
 	 */
-	public void updateWeight(double error) {
+	public void updateWeight(BigDecimal error) {
 		if (NeuralNetwork.DEBUG)
 			System.out.println("Error was: " + this.error + " to: " + error);
 
@@ -86,7 +89,7 @@ public class Weight extends Model<Double, Double> {
 		if (NeuralNetwork.DEBUG)
 			System.out.println("CALCULATING NEW WEIGHT: " + this.weight + " + (" + error + " * " + this.input + ")");
 
-		this.weight = this.weight + (error * this.input);
+		this.weight = this.weight.add((error.multiply(this.input)));
 
 		if (NeuralNetwork.DEBUG)
 			System.out.println("Updating the weight: " + this.oldWeight + " to: " + this.weight);

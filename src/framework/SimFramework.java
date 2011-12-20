@@ -44,7 +44,7 @@ public class SimFramework<I, O> {
 		root.delta();
 
 		// do the lambda function
-		System.out.println("FINAL OUTPUT IS: ");
+		System.out.println("TICK OUTPUT IS: ");
 		ArrayList<O> out = root.lambda();
 		for (O o : out) {
 			System.out.print(o.toString() + " ");

@@ -1,5 +1,6 @@
 package main;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -14,22 +15,65 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		int[] numNeuronsAtEachLayer = new int[3];
-		numNeuronsAtEachLayer[0] = 2;
+		numNeuronsAtEachLayer[0] = 5;
 		// Hecht-Nielsen theorem
 		// numNeuronsAtEachLayer[1] = (numNeuronsAtEachLayer[0] * 2) + 1;
-		numNeuronsAtEachLayer[1] = 2;
+		numNeuronsAtEachLayer[1] = 11;
 		numNeuronsAtEachLayer[2] = 1;
 
 		Scanner sc = new Scanner(System.in);
-		System.out.print("Please enter the 32bit IP Address: ");
-		// String initial = sc.nextLine();
-		// System.out.println();
-		// if (initial.split(" ").length != numNeuronsAtEachLayer[0]) {
-		// System.err.println("You did not enter enough inputs");
-		// return;
-		// }
+		System.out.print("Please enter the number of layers: ");
+		int numLayers = Integer.parseInt(sc.nextLine().trim());
+		while (numLayers < 3) {
+			System.out.println("You must have at least 3 layers");
+			System.out.print("Please enter the number of layers: ");
+			numLayers = Integer.parseInt(sc.nextLine().trim());
+		}
+		numNeuronsAtEachLayer = new int[numLayers];
+		System.out.println();
+		System.out.println("Please enter the number of neurons at each layer.");
+		System.out.println("Suggestion. Use Hecht-Nielsen theorem. (inputs * 2) + 1");
+		System.out.println("Note: The more neurons the longer it will take to train.");
+		System.out.println("ie. 2 5 1");
+		String[] numNeurons = sc.nextLine().trim().split(" ");
+		System.out.println();
+		for (int i = 0; i < numLayers; i++) {
+			numNeuronsAtEachLayer[i] = Integer.parseInt(numNeurons[i]);
+		}
 
-		String actual = ".35 .9";
+		System.out.println("Please enter the inputs followed by their target output");
+		System.out.println("ie. <input> <output> [<input> <output>]");
+		System.out.println("ie. .35 .9 .3 .68 .2 .7");
+		String[] inputLine = sc.nextLine().trim().split(" ");
+		while ((inputLine.length % (numNeuronsAtEachLayer[0] + numNeuronsAtEachLayer[numNeuronsAtEachLayer.length - 1])) != 0) {
+			System.out.println("You did not enter enought inputs with target outputs");
+			System.out.println("Please enter the inputs followed by their target output");
+			System.out.println("ie. <input> <output> [<input> <output>]");
+			System.out.println("ie. .35 .9 .3 .68 .2 .7");
+			inputLine = sc.nextLine().trim().split(" ");
+		}
+		int pointer = 0;
+		int numTimes = inputLine.length / (numNeuronsAtEachLayer[0] + numNeuronsAtEachLayer[numNeuronsAtEachLayer.length - 1]);
+		String[] inputsAndTargets = new String[numTimes];
+		for (int init = 0; init < inputsAndTargets.length; init++) {
+			inputsAndTargets[init] = "";
+		}
+		for (int j = 0; j < numTimes; j++) {
+			for (int i = 0; i < numNeuronsAtEachLayer[0]; i++) {
+				inputsAndTargets[j] += inputLine[pointer++] + " ";
+			}
+			// get the targets
+			for (int i = 0; i < numNeuronsAtEachLayer[numNeuronsAtEachLayer.length - 1]; i++) {
+				inputsAndTargets[j] += inputLine[pointer++] + " ";
+			}
+			inputsAndTargets[j] = inputsAndTargets[j].trim();
+		}
+
+		System.out.println("How many times would you like to train?");
+		int trainTimes = Integer.parseInt(sc.nextLine());
+
+		// IP Translation stuff here. This should be done outside the scope of
+		// this program. The neural net.
 
 		// String initial = "192.168.1.10";
 		//
@@ -51,70 +95,55 @@ public class Main {
 		// actual = actual.replaceAll(".(?=.)", "$0 ");
 		// System.out.println("Input: " + actual);
 
-		// ///// test something else
-		// String initial2 = "127.0.0.1";
-		//
-		// String[] sp2 = initial2.split("\\.");
-		// String[] bin2 = new String[sp2.length];
-		// // System.out.println("len: " + sp.length);
-		// for (int i2 = 0; i2 < sp2.length; i2++) {
-		// int a2 = Integer.parseInt(sp2[i2]);
-		// String outA2 = Integer.toBinaryString(a2);
-		// while (outA2.length() < 8) {
-		// outA2 = "0" + outA2;
-		// }
-		// bin2[i2] = outA2;
-		// // System.out.println(outA);
-		// }
-		//
-		// String actual2 = "";
-		// actual2 = bin2[0] + bin2[1] + bin2[2] + bin2[3];
-		// actual2 = actual2.replaceAll(".(?=.)", "$0 ");
-		// // System.out.println("Input: " + actual2);
-
-		double target = .3;
-		// double target2 = 0;
-
-		NeuralNetwork model = new NeuralNetwork(numNeuronsAtEachLayer, target);
-		SimFramework<Double, Double> sf = new SimFramework<Double, Double>(model);
+		NeuralNetwork model = new NeuralNetwork(numNeuronsAtEachLayer);
+		SimFramework<BigDecimal, BigDecimal> sf = new SimFramework<BigDecimal, BigDecimal>(model);
 		sf.takeInputFunction(new BinaryInput());
-		// int runTimes = numNeuronsAtEachLayer.length +
-		// (numNeuronsAtEachLayer.length - 1);
-
-		// how many times should we trian it?
-		int trainTimes = 1000;
 		for (int i = 0; i < trainTimes; i++) {
-			System.out.println();
-			System.out.println("Run iteration: " + i);
-			sf.train(actual); // this needs to take in the target
-			System.out.println();
+			for (int itemsTrain = 0; itemsTrain < inputsAndTargets.length; itemsTrain++) {
+				System.out.println();
+				System.out.println("Train iteration: " + i);
+				System.out.println("inputting: " + inputsAndTargets[itemsTrain]);
+				sf.train(inputsAndTargets[itemsTrain]); // this needs to take in
+														// the target
+				System.out.println();
+			}
 		}
 
-		sf.tick(actual);
+		System.out.println("Done training");
+
+		for (;;) {
+			System.out.println("Please enter an input to run through the network. Or 'exit' to exit.");
+			System.out.println("ie. .35 .9");
+			String in = "";
+			try {
+				in = sc.nextLine();
+			} catch (java.util.NoSuchElementException e) {
+				System.exit(-1);
+			}
+			if (in.equals("exit")) {
+				break;
+			}
+			if (in.split(" ").length != numNeuronsAtEachLayer[0]) {
+				System.err.println("Not valid input");
+				continue;
+			}
+			sf.tick(in);
+		}
+		System.out.println("Goodbye.");
 
 	}
 }
 
-class BinaryInput implements Inputtable<Double> {
+class BinaryInput implements Inputtable<BigDecimal> {
 
 	@Override
-	public ArrayList<Double> input(String line) {
-		// TODO: Take each of the inputs in the string and create a collection
+	public ArrayList<BigDecimal> input(String line) {
+		// Take each of the inputs in the string and create a collection
 		// out of them
-		ArrayList<Double> list = new ArrayList<Double>();
+		ArrayList<BigDecimal> list = new ArrayList<BigDecimal>();
 		for (String s : line.split("\\s+")) {
-			// s = s.trim();
-			double num = Double.parseDouble(s);
-			if (NeuralNetwork.DEBUG)
-				System.out.println("Adding : " + num);
+			BigDecimal num = new BigDecimal(Double.parseDouble(s));
 			list.add(num);
-			// if (s.equals("1")) {
-			// list.add(1.0);
-			// } else if (s.equals("0")) {
-			// list.add(0.0);
-			// } else {
-			// System.err.println("[" + s + "] is not a valid input");
-			// }
 		}
 
 		return list;
